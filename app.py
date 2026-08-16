@@ -20,6 +20,10 @@ def obtener_servicio_drive():
     if "gcp_service_account" in st.secrets:
         try:
             creds_dict = dict(st.secrets["gcp_service_account"])
+            # Formateo de seguridad para evitar MalformedFraming
+            if "private_key" in creds_dict:
+                creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+            
             creds = service_account.Credentials.from_service_account_info(
                 creds_dict, scopes=SCOPES
             )
